@@ -1,44 +1,35 @@
-name: Test & QA
+name: Run unit tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main", "rewrite" ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ["3.9", "3.12"]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
     - uses: actions/checkout@v4
-
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Lint
-      run: |
-        pip install flake8 ruff
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # stop the build if there are Python syntax errors or undefined names
-        ruff --format=github --select=E9,F63,F7,F82 --target-version=py37 .
-        # default set of ruff rules with GitHub Annotations
-        #ruff --format=github --target-version=py37 --ignore=F401,E501 .
-
-    - name: Run tests
-      run: |
-        pip install pytest
-        cd pilot
-        PYTHONPATH=. pytest
+        python -m pip install poetry
+        poetry install --with=dev
+    - name: Lint with ruff
+      run: poetry run ruff check --output-format github
+    - name: Check code style with ruff
+      run: poetry run ruff format --check --diff
+    - name: Test with pytest
+      run: poetry run pytest
