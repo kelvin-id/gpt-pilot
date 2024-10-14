@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  dbgate:
+    image: dbgate/dbgate:latest
+    container_name: dbgate
+    ports:
+      - "8001:3000"
+    volumes:
+      - ${PWD}/pythagora.db:/db/pythagora.db
+    environment:
+      # - DBGATE_LOG_LEVEL=info
+      - CONNECTIONS=local
+      - LABEL_local=GPT-Pilot
+      - ENGINE_local=sqlite@dbgate-plugin-sqlite
+      - FILE_local=/db/pythagora.db
+    profiles: [sqllite]

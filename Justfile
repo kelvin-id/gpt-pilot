@@ -1,14 +1,10 @@
 # Startup check Dotenv file
-!include scripts/just/modules/dotenv.justfile
-!include scripts/just/modules/executor.justfile
-!include scripts/just/modules/python.justfile
+import "scripts/just/modules/dotenv.asd"
+import "scripts/just/modules/executor.asd"
+import "scripts/just/modules/python.asd"
+import "scripts/just/modules/gpt-projects.asd"
 
 # Project Commands
-
-# Initialize database
-init-db: dir-logger
-    #!/usr/bin/env bash
-    {{PYTHON}} pilot/db_init.py
 
 # Create logger folder
 dir-logger:
@@ -19,5 +15,11 @@ dir-logger:
 start: dir-logger
     {{PYTHON}} pilot/main.py
 
+sqllite-up:
+    docker compose -f docker/docker-compose.yml up -d
+
+sqllite-down:
+    docker compose -f docker/docker-compose.yml down
+
 # Complete setup and start
-all: pip-install-poetry poetry-requirements poetry-install init-db start
+all: pip-install-poetry poetry-requirements poetry-install start
