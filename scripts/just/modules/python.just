@@ -1,4 +1,5 @@
 #Just
+
 PYTHON:="poetry run python"
 
 # Create and activate a virtual environment

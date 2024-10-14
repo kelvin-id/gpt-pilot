@@ -1,7 +1,19 @@
-#Just
-# GPT_PROJECTS
-# set shell := ["bash", "-eu", "-o", "pipefail"]
-gpt-project-load:
+#Just/ASD
+
+# Project Commands
+
+# Create logger folder
+dir-logger:
+    #!/usr/bin/env bash
+    [ -d "logger" ] || mkdir logger
+
+start:gp-start
+# Start GPT Pilot
+gp-start: dir-logger
+    {{PYTHON}} main.py
+
+load: gp-project-load
+gp-project-load:
 	#!/usr/bin/env bash
 	echo "Available projects:"
 

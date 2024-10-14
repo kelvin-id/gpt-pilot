@@ -1,4 +1,5 @@
-#Just
+#Just/ASD
+
 me:
     @echo The executable is at: {{just_executable()}}
 

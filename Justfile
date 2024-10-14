@@ -1,25 +1,9 @@
 # Startup check Dotenv file
-import "scripts/just/modules/dotenv.asd"
-import "scripts/just/modules/executor.asd"
-import "scripts/just/modules/python.asd"
-import "scripts/just/modules/gpt-projects.asd"
-
-# Project Commands
-
-# Create logger folder
-dir-logger:
-    #!/usr/bin/env bash
-    [ -d "logger" ] || mkdir logger
-
-# Start GPT Pilot
-start: dir-logger
-    {{PYTHON}} pilot/main.py
-
-sqllite-up:
-    docker compose -f docker/docker-compose.yml up -d
-
-sqllite-down:
-    docker compose -f docker/docker-compose.yml down
+import "scripts/just/modules/dotenv.just"
+import "scripts/just/modules/executor.just"
+import "scripts/just/modules/python.just"
+import "scripts/just/modules/gpt-pilot.just"
+import "scripts/just/modules/docker.just"
 
 # Complete setup and start
-all: pip-install-poetry poetry-requirements poetry-install start
+init: pip-install-poetry poetry-requirements poetry-install gp-start

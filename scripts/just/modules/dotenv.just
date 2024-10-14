@@ -1,5 +1,6 @@
-#Just
-DEFAULT_DOTENV:="./pilot/.env.example"
+#Just/ASD
+
+DEFAULT_DOTENV:="./scripts/setup/.env.asd-example"
 PROJECT_DOTENV:=".env"
 
 set dotenv-load
